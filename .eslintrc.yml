@@ -1,0 +1,36 @@
+env:
+  node: true
+  es6: true
+extends: 'eslint:recommended'
+parserOptions:
+  ecmaVersion: 2018
+rules:
+  indent:
+    - error
+    - 2
+    - SwitchCase: 1
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - warn
+    - single
+  semi:
+    - error
+    - always
+  no-console:
+    - error
+    - allow:
+        - info
+        - warn
+        - error
+  eqeqeq:
+    - error
+    - always
+  no-shadow: error
+  no-use-before-define: error
+  no-unused-vars:
+    - error
+    - argsIgnorePattern: '^_'
+  no-var: error
+  prefer-const: warn
