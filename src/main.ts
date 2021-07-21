@@ -94,7 +94,9 @@ export async function check(source: string[], options: ICheckOptions): Promise<v
     /**
      * @TODO Изменять файл либо с помощью флага или после интерактивного вопроса
      */
-    // await writeJSON(file, flat ? createObjectFromStruct(out) : createDeepObjectFromStruct(out));
+    if (!info.emptyKeys.length && !info.diffKeys.length) {
+      await writeJSON(file, flat ? createObjectFromStruct(out) : createDeepObjectFromStruct(out));
+    }
   }
 
   log('Успешно');
@@ -153,29 +155,32 @@ export async function getInfo(source: string[], options: IGetInfoOptions): Promi
   process.stdout.write('\u001b[2J\u001b[0;0H');
   const { debug } = options;
 
+  let totalCount = 0;
   const sourcePromise = Promise.all<Promise<string[]>>(source.map((s) => getFiles(s)));
   const sources: string[] = getUnique((await sourcePromise).flat());
-  const ruTextRegEx = /^.*'[А-Яа-яЁё ]+'.*$/;
+  const ruTextRegEx = /(['"`])[А-Яа-яЁё]+?\W+?\1/;
 
-  let match;
   for (const file of sources) {
     const out = [] as [number, string][];
     try {
       const fileStr = await readFile(file);
       for (let i = 0, arr = fileStr.split('\n'); i < arr.length; i++) {
         const str = arr[i];
-        if ((match = ruTextRegEx.exec(str))) {
-          out.push([i, match[0]]);
+        if (ruTextRegEx.test(str)) {
+          out.push([i, str]);
+          totalCount++;
         }
       }
 
       if (out.length) {
         console.info(file);
         console.info(`Совпадений (${out.length})`);
-        console.info(out.map((e) => `${e[0] + 1}\t${e[1].trim()}`).join('\n'));
+        console.info(out.map((e) => `${e[0] + 1}\t${e[1].trim()}`).join('\n') + '\n');
       }
     } catch (error) {
       console.error('[ERR] Ошибка чтения файла', error);
     }
   }
+
+  console.info(`Всего найдено совпадений (${totalCount})`);
 }
