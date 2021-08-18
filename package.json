@@ -7,8 +7,16 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "localize",
+    "cli",
+    "translation",
+    "i18n",
+    "js"
+  ],
   "license": "ISC",
   "files": [
     "dist",
