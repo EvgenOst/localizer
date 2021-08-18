@@ -23,12 +23,13 @@ interface ICheckOptions {
   sort?: boolean;
   flat?: boolean;
   regex?: string;
+  write?: boolean;
 }
 
 const emptyFn = () => {};
 
 export async function check(source: string[], options: ICheckOptions): Promise<void> {
-  const { quiet, debug, clean, sort, flat, regex } = options;
+  const { quiet, debug, clean, sort, flat, regex, write } = options;
   const log = !quiet ? console.info.bind(console, '[INF]') : emptyFn;
   const dbg = debug ? console.debug.bind(console, '[DBG]') : emptyFn;
   const warn = console.warn.bind(console, '[WRN]');
@@ -95,7 +96,7 @@ export async function check(source: string[], options: ICheckOptions): Promise<v
     /**
      * @TODO Изменять файл либо с помощью флага или после интерактивного вопроса
      */
-    if (!info.emptyKeys.length && !info.diffKeys.length) {
+    if ((!info.emptyKeys.length && !info.diffKeys.length) || write) {
       await writeJSON(file, flat ? createObjectFromStruct(out) : createDeepObjectFromStruct(out));
     }
   }
