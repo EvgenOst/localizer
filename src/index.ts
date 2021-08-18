@@ -14,16 +14,17 @@ programm
   .option('-s, --sort', 'Сортировать полученные ключи')
   .option('-f, --flat', 'Генерация без парсинга ключей')
   .option('-d, --debug', 'Флаг включения debug режима')
+  // .option('-r, --regex <value>', 'Регулярное выражение для поиска')
   .action(check);
 
-programm
-  .command('update')
-  .description('Обновление структуры файла с указанием источника')
-  .argument('<source>', 'Файл источник')
+// programm
+//   .command('update')
+//   .description('Обновление структуры файла с указанием источника')
+//   .argument('<source>', 'Файл источник')
   // .requiredOption('-t, --target <value>', 'Файл/директория файлов локализации')
-  .option('-c, --clean', 'Удалить все несуществующие ключи перевода')
-  .option('-q, --quiet', 'Исполнение без вывода в консоль')
-  .action(updateLocales);
+  // .option('-c, --clean', 'Удалить все несуществующие ключи перевода')
+  // .option('-q, --quiet', 'Исполнение без вывода в консоль')
+  // .action(updateLocales);
 
 programm
   .command('info')

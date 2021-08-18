@@ -22,12 +22,13 @@ interface ICheckOptions {
   clean?: boolean;
   sort?: boolean;
   flat?: boolean;
+  regex?: string;
 }
 
 const emptyFn = () => {};
 
 export async function check(source: string[], options: ICheckOptions): Promise<void> {
-  const { quiet, debug, clean, sort, flat } = options;
+  const { quiet, debug, clean, sort, flat, regex } = options;
   const log = !quiet ? console.info.bind(console, '[INF]') : emptyFn;
   const dbg = debug ? console.debug.bind(console, '[DBG]') : emptyFn;
   const warn = console.warn.bind(console, '[WRN]');
@@ -47,10 +48,10 @@ export async function check(source: string[], options: ICheckOptions): Promise<v
   /**
    * @TODO Вынести регулярное выражение в настройку
    */
-  const regex = /(?:[\W])__\(\s*['"]([\w-.%]+?)['"](?:,(?:['"\w\s]*?)?)*?\)/gm;
+  const checkRegex = /(?:[\W])__\(\s*['"]([\w-.%]+?)['"](?:,(?:['"\w\s]*?)?)*?\)/gm;
   let entries = [] as string[];
   for (const file of sources) {
-    entries = entries.concat(await findEntries(file, regex));
+    entries = entries.concat(await findEntries(file, checkRegex));
   }
   const struct = createEmptyStruct(entries);
 

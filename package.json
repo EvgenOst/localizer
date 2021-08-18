@@ -1,22 +1,29 @@
 {
   "name": "localizer",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.1.0",
+  "author": "Evgeniy Ostapenko <eug.ostap@gmail.com>",
+  "description": "CLI application to help with project localization and language file management",
   "main": "index.js",
   "scripts": {
     "watch": "tsc -w",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "debug-check": "node ./dist check"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
   "license": "ISC",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EvgenOst/localizer.git"
+  },
   "dependencies": {
-    "commander": "^8.0.0",
-    "eslint": "^7.30.0",
-    "prettier": "^2.3.2"
+    "commander": "^8.0.0"
   },
   "devDependencies": {
+    "eslint": "^7.30.0",
+    "prettier": "^2.3.2",
     "@types/node": "^16.3.2",
     "typescript": "^4.3.5"
   }
