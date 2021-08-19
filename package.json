@@ -1,6 +1,6 @@
 {
   "name": "@evgeniy-ost/localizer-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Evgeniy Ostapenko <eug.ostap@gmail.com>",
   "description": "CLI application to help with project localization and language file management",
   "main": "bin/index.js",
