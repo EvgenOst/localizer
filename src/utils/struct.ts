@@ -85,6 +85,14 @@ export function apply(target: Struct, source: Struct, reset = false): Struct {
   return result;
 }
 
+export function clearValues(struct: Struct) {
+  const result = new Map() as Struct;
+  for (const [key] of struct) {
+    result.set(key, '');
+  }
+  return result;
+}
+
 export function getStructInfo(out: Struct, origin?: Struct) {
   const emptyKeys = [];
   const diffKeys = [];

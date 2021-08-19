@@ -23,7 +23,7 @@
   ],
   "license": "ISC",
   "files": [
-    "dist",
+    "bin",
     "LICENSE"
   ],
   "repository": {

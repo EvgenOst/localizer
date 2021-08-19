@@ -105,48 +105,53 @@ export async function check(source: string[], options: ICheckOptions): Promise<v
 }
 
 interface IUpdateLocalesOptions {
-  sort?: boolean;
+  target: string;
+  clean?: boolean;
+  flat?: boolean;
   quiet?: boolean;
+  sort?: boolean;
 }
 
 export async function updateLocales(source: string, options: IUpdateLocalesOptions) {
-  const allowConsole = !options.quiet;
+  const { target, clean, flat, quiet, sort } = options;
+  const log = !quiet ? console.info.bind(console, '[INF]') : emptyFn;
+  const warn = console.warn.bind(console, '[WRN]');
+  const error = console.error.bind(console, '[ERR]');
+
   const sources = await getFiles(source);
 
   if (sources.length !== 1) {
-    console.error('[ERROR] Неверно указан файл источник');
+    error('Неверно указан файл источник');
     return;
   }
   const sourceFile = sources[0];
-  // const targets = (await getFiles(options.target)).filter((f) => f !== sourceFile);
+  const targets = (await getFiles(target)).filter((f) => f !== sourceFile);
 
   const sourceObj = await readJSON(sourceFile);
   if (!sourceObj) return;
 
-  const struct = createStructFromObject(sourceObj);
+  for (const file of targets) {
+    log(`Обновление ${file}`);
 
-  const out = sortStruct(struct);
+    const struct = createStructFromObject(sourceObj);
+    const data = await readJSON(file);
+    const dataStruct = createStructFromObject(data || {});
+    let out;
 
-  console.log(out);
+    if (!clean) {
+      out = merge(struct, dataStruct);
+    } else {
+      out = apply(struct, merge(struct, dataStruct), true);
+    }
 
-  // for (const file of targets) {
-  //   if (allowConsole) console.info('Обновление ' + file.replace(/(\w+\..*)$/, '$1'));
+    if (sort) {
+      out = sortStruct(out);
+    }
 
-  //   const data = await readJSON(file);
-  //   let out;
+    await writeJSON(file, flat ? createObjectFromStruct(out) : createDeepObjectFromStruct(out));
+  }
 
-  //   if (options.clean) {
-  //     out = merge(restoreObject({}, struct), data);
-  //   } else {
-  //     out = restoreObject(data, struct);
-  //   }
-
-  //   out = merge(out, sourceObj);
-
-  //   await writeJSON(file, out);
-  // }
-
-  if (allowConsole) console.info('Успешно');
+  log('Успешно');
 }
 
 interface IGetInfoOptions {
